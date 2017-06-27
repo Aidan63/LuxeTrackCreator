@@ -1,0 +1,32 @@
+{
+  project : {
+
+      //These first two are required
+    name : 'Editor',
+    version : '1.0.0',
+    author : 'Aidan Lee',
+
+      //This configures your app.
+      //The package is important, it's used 
+      //for save locations, initializing mobile project files etc
+    app : {
+      name : 'relapse_editor',
+      package : 'uk.aidanlee.relapse.editor'
+    },
+
+      //This configures the build process
+    build : {
+      dependencies : {
+        luxe : '*',
+        mint : '*'
+      }
+    },
+
+      //Copies over all the assets to the output
+    files : {
+      assets : 'assets/'
+    }
+
+  } //project
+
+}
