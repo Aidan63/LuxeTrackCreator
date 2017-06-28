@@ -4,6 +4,7 @@ import luxe.Component;
 import luxe.Mesh;
 import luxe.Vector;
 import components.CurvePoints;
+import utils.Tilesets;
 
 class CurveTileRenderer extends Component
 {
@@ -23,6 +24,14 @@ class CurveTileRenderer extends Component
     override public function onremoved()
     {
         clean();
+    }
+
+    public function updateTexture(_position : Int)
+    {
+        if (Tilesets.currentTile != null)
+        {
+            tiles[_position].mesh.geometry.texture = Luxe.resources.texture(Tilesets.currentTile.path);
+        }
     }
 
     public function render()

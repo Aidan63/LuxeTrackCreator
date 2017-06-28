@@ -5,32 +5,53 @@ import haxe.io.Path;
 
 class FileManager
 {
-    /*
-    public static function listTilesets()
+    /**
+     *  Gets a list of all tilesets.
+     *  @return Array of all tileset folder names.
+     */
+    public static function listTilesets() : Array<String>
     {
+        var tilesets = new Array<String>();
+
         var basePath = FileSystem.fullPath('assets/tilesets/');
         for (item in FileSystem.readDirectory(basePath))
         {
             var itemPath : String = Path.join([basePath, item]);
             if (FileSystem.isDirectory(itemPath))
             {
-                trace(item);
-                listTextures(itemPath);
+                tilesets.push(item);
             }
         }
+
+        return tilesets;
     }
 
-    public static function listTextures(_tilesetPath : String)
+    public static function getTiles(_tileset : String) : Array<TileData>
     {
-        for (item in FileSystem.readDirectory(_tilesetPath))
+        var tiles = new Array<TileData>();
+
+        var basePath = FileSystem.fullPath('assets/tilesets/');
+        for (item in FileSystem.readDirectory(basePath))
         {
-            if (!FileSystem.isDirectory(Path.join([_tilesetPath, item])))
+            var itemPath : String = Path.join([basePath, item]);
+            if (FileSystem.isDirectory(itemPath) && item == _tileset)
             {
-                trace('    $item');
+                // 
+                for (item in FileSystem.readDirectory(itemPath))
+                {
+                    if (!FileSystem.isDirectory(Path.join([itemPath, item])))
+                    {
+                        tiles.push({
+                            name : item,
+                            path : 'assets/tilesets/$_tileset/$item'
+                        });
+                    }
+                }
             }
         }
+
+        return tiles;
     }
-    */
 
     public static function getTilesetTextures() : Array<String>
     {
@@ -61,4 +82,9 @@ class FileManager
 
         return texturePaths;
     }
+}
+
+typedef TileData = {
+    var name : String;
+    var path : String;
 }

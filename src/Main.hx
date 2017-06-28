@@ -2,7 +2,7 @@ import luxe.GameConfig;
 import luxe.Input;
 import luxe.States;
 
-import utils.FileManager;
+import utils.Tilesets;
 
 class Main extends luxe.Game
 {
@@ -21,9 +21,10 @@ class Main extends luxe.Game
         _config.preload.texts.push({ id : 'assets/tile.obj' });
 
         // Load all of the tileset textures.
-        for (texturePath in FileManager.getTilesetTextures())
+        Tilesets.discoverTilesets();
+        for (tile in Tilesets.getAllTiles())
         {
-            _config.preload.textures.push({ id : texturePath });
+            _config.preload.textures.push({ id : tile.path });
         }
 
         return _config;

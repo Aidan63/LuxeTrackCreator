@@ -10,6 +10,7 @@ import ui.windows.UIGridWindow;
 import ui.windows.UISegmentEditor;
 import ui.windows.UICursorMode;
 import ui.windows.UISegmentCreator;
+import ui.windows.UISegmentTiles;
 
 class EditorUI
 {
@@ -22,16 +23,17 @@ class EditorUI
     private var cursorMode     : UICursorMode;
     private var segmentEditor  : UISegmentEditor;
     private var gridEditor     : UIGridWindow;
+    private var segmentTiles   : UISegmentTiles;
 
     public function new()
     {
         // Listen to public events for the UI.
-        Luxe.events.listen('segment.selected', onSegmentSelected);
+        Luxe.events.listen('segment.selected', showSegmentEditor);
 
-        Luxe.events.listen('cursor.select' , hideSegmentEditor);
-        Luxe.events.listen('cursor.remove' , hideSegmentEditor);
-        Luxe.events.listen('cursor.paint'  , hideSegmentEditor);
-        Luxe.events.listen('cursor.connect', hideSegmentEditor);
+        Luxe.events.listen('cursor.select' , hideAll);
+        Luxe.events.listen('cursor.remove' , hideAll);
+        Luxe.events.listen('cursor.paint'  , showSegmentPainter);
+        Luxe.events.listen('cursor.connect', hideAll);
 
         // Create a seperate camera and batcher for the UI.
         var camera  = new phoenix.Camera();
@@ -66,8 +68,10 @@ class EditorUI
      * When a segment is selected create a new segment editor UI and set the entity to that selected.
      * @param _entity The entity which has been selected.
      */
-    private function onSegmentSelected(_entity : Entity)
+    private function showSegmentEditor(_entity : Entity)
     {
+        hideSegmentPainter(null);
+
         if (segmentEditor == null)
         {
             segmentEditor = new UISegmentEditor(canvas);
@@ -85,5 +89,30 @@ class EditorUI
             segmentEditor.destroy();
             segmentEditor = null;
         }
+    }
+
+    private function hideSegmentPainter(_)
+    {
+        if (segmentTiles != null)
+        {
+            segmentTiles.destroy();
+            segmentTiles = null;
+        }
+    }
+
+    private function showSegmentPainter(_)
+    {
+        hideSegmentEditor(null);
+
+        if (segmentTiles == null)
+        {
+            segmentTiles = new UISegmentTiles(canvas);
+        }
+    }
+
+    private function hideAll(_)
+    {
+        hideSegmentEditor(null);
+        hideSegmentPainter(null);
     }
 }

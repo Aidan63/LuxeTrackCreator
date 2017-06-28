@@ -42,6 +42,14 @@ class CurveQuadCollisions extends Component
             if (Collision.pointInPoly(mouse.x, mouse.y, polygons[i]))
             {
                 geometry[i].color.a = 0.5;
+
+                if (Luxe.input.mousedown(left))
+                {
+                    if (has('tile_drawer'))
+                    {
+                        cast(get('tile_drawer'), CurveTileRenderer).updateTexture(i);
+                    }
+                }
             }
             else
             {
