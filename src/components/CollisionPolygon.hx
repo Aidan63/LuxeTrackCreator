@@ -20,7 +20,6 @@ class CollisionPolygon extends Component
     override public function onadded()
     {       
         build();
-        render();
     }
 
     override public function onremoved()
@@ -44,18 +43,10 @@ class CollisionPolygon extends Component
         }
     }
 
-    public function clean()
-    {
-        if (visual != null)
-        {
-            visual.drop();
-            visual = null;
-        }
-        if (trackPoly != null) { trackPoly.destroy(); }
-    }
-
     public function build()
     {
+        clean();
+
         if (has('points'))
         {
             var points : CurvePoints = cast get('points');
@@ -92,9 +83,25 @@ class CollisionPolygon extends Component
             // Create the poly
             trackPoly = new Polygon(0, 0, verticies);
         }
+
+        render();
     }
 
-    public function render()
+    private function clean()
+    {
+        if (visual != null)
+        {
+            visual.drop();
+            visual = null;
+        }
+        if (trackPoly != null)
+        {
+            trackPoly.destroy();
+            trackPoly = null;
+        }
+    }
+
+    private function render()
     {
         if (has('points'))
         {
