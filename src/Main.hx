@@ -2,6 +2,8 @@ import luxe.GameConfig;
 import luxe.Input;
 import luxe.States;
 
+import utils.FileManager;
+
 class Main extends luxe.Game
 {
     public var states : States;
@@ -17,6 +19,12 @@ class Main extends luxe.Game
 
         _config.preload.textures.push({ id : 'assets/track.png' });
         _config.preload.texts.push({ id : 'assets/tile.obj' });
+
+        // Load all of the tileset textures.
+        for (texturePath in FileManager.getTilesetTextures())
+        {
+            _config.preload.textures.push({ id : texturePath });
+        }
 
         return _config;
     }
