@@ -12,6 +12,8 @@ import components.RenderTangents;
 import components.CurveQuadCollisions;
 import components.NeighbourHighlighter;
 import components.CurveTileRenderer;
+import components.SegmentEndsHelper;
+import components.SegmentOffsetHelper;
 
 class TrackSegment extends Entity
 {
@@ -48,9 +50,9 @@ class TrackSegment extends Entity
         fsm = new EntityStateMachine();
         fsm.createState('unselected' );
         fsm.createState('selectable' ).add(new CollisionPolygon());
-        fsm.createState('selected'   ).add(new ControlPoints());
+        fsm.createState('selected'   ).add(new ControlPoints()).add(new SegmentEndsHelper()).add(new SegmentOffsetHelper());
         fsm.createState('destroyable').add(new CollisionPolygon());
-        fsm.createState('neighbours' ).add(new NeighbourHighlighter());
+        fsm.createState('neighbours' ).add(new NeighbourHighlighter()).add(new SegmentEndsHelper());
         fsm.createState('paintable'  ).add(new CurveQuadCollisions());
 
         add(fsm);
@@ -283,77 +285,19 @@ class TrackSegment extends Entity
             curve.lengthMappings = lengths.lengthMappings;
         }
 
-        buildPoints();
-        buildQuads();
-        buildCollision();
-        renderSkeleton();
-        renderTangents();
-        renderTiles();
-    }
+        // Build data
+        if (has('points')) { cast(get('points'), CurvePoints).build(); }
+        if (has('collision')) { cast(get('collision'), CollisionPolygon).build(); }
+        if (has('curve_quads')) { cast(get('curve_quads'), CurveQuadCollisions).build(); }
 
-    /**
-     * Create the start, end, and sub points for the segment.
-     */
-    private function buildPoints()
-    {
-        if (has('points'))
-        {
-            var points : CurvePoints = cast get('points');
-            points.build();
-        }
-    }
+        // Drawing stuff
+        if (has('tile_drawer')) { cast(get('tile_drawer'), CurveTileRenderer).render(); }
+        if (has('skeleton_drawer')) { cast(get('skeleton_drawer'), RenderSkeleton).render(); }
+        if (has('tangent_drawer' )) { cast(get('tangent_drawer' ), RenderSkeleton).render(); }
 
-    private function buildQuads()
-    {
-        if (has('curve_quads'))
-        {
-            var quads : CurveQuadCollisions = cast get('curve_quads');
-            quads.build();
-        }
-    }
-
-    private function renderTiles()
-    {
-        if (has('tile_drawer'))
-        {
-            var drawer : CurveTileRenderer = cast get('tile_drawer');
-            drawer.render();
-        }
-    }
-
-    private function buildCollision()
-    {
-        if (has('collision'))
-        {
-            var polygon : CollisionPolygon = cast get('collision');
-            polygon.clean();
-            polygon.build();
-            polygon.render();
-        }
-    }
-
-    /**
-     * Draws the skeleton of the segment.
-     */
-    private function renderSkeleton()
-    {
-        if (has('skeleton_drawer'))
-        {
-            var drawer : RenderSkeleton = cast get('skeleton_drawer');
-            drawer.render();
-        }
-    }
-
-    /**
-     * Draws the tangents of the segments points.
-     */
-    private function renderTangents()
-    {
-        if (has('tangent_drawer'))
-        {
-            var drawer : RenderTangents = cast get('tangent_drawer');
-            drawer.render();
-        }
+        // Extra stuff
+        if (has('ends_helper'  )) { cast(get('ends_helper'  ), SegmentEndsHelper  ).build(); }
+        if (has('offset_helper')) { cast(get('offset_helper'), SegmentOffsetHelper).build(); }
     }
 
     /**
