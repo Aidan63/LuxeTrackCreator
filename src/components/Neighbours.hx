@@ -19,4 +19,24 @@ class Neighbours extends Component
     {
         super({ name : 'neighbours' });
     }
+
+    override public function onadded()
+    {
+        next = null;
+        previous = null;
+    }
+
+    override public function onremoved()
+    {
+        if (next != null)
+        {
+            next.events.fire('neighbour.prev.removed');
+            next = null;
+        }
+        if (previous != null)
+        {
+            previous.events.fire('neighbour.next.removed');
+            previous = null;
+        }
+    }
 }
