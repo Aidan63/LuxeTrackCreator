@@ -4,12 +4,13 @@ import luxe.Entity;
 import utils.fsm.EntityStateMachine;
 import components.curves.Curve;
 import components.ControlPoints;
+import components.CurveTiles;
 import components.CurvePoints;
 import components.CollisionPolygon;
 import components.Neighbours;
 import components.RenderSkeleton;
 import components.RenderTangents;
-import components.CurveQuadCollisions;
+import components.CurveTileHighlighter;
 import components.NeighbourHighlighter;
 import components.CurveTileRenderer;
 import components.SegmentEndsHelper;
@@ -53,7 +54,7 @@ class TrackSegment extends Entity
         fsm.createState('selected'   ).add(new ControlPoints()).add(new SegmentEndsHelper()).add(new SegmentOffsetHelper());
         fsm.createState('destroyable').add(new CollisionPolygon());
         fsm.createState('neighbours' ).add(new NeighbourHighlighter()).add(new SegmentEndsHelper());
-        fsm.createState('paintable'  ).add(new CurveQuadCollisions());
+        fsm.createState('paintable'  ).add(new CurveTileHighlighter());
 
         add(fsm);
 
@@ -286,14 +287,15 @@ class TrackSegment extends Entity
         }
 
         // Build data
-        if (has('points')) { cast(get('points'), CurvePoints).build(); }
+        if (has('points'   )) { cast(get('points'   ), CurvePoints     ).build(); }
+        if (has('tiles'    )) { cast(get('tiles'    ), CurveTiles      ).build(); }
         if (has('collision')) { cast(get('collision'), CollisionPolygon).build(); }
-        if (has('curve_quads')) { cast(get('curve_quads'), CurveQuadCollisions).build(); }
 
         // Drawing stuff
-        if (has('tile_drawer')) { cast(get('tile_drawer'), CurveTileRenderer).render(); }
-        if (has('skeleton_drawer')) { cast(get('skeleton_drawer'), RenderSkeleton).render(); }
-        if (has('tangent_drawer' )) { cast(get('tangent_drawer' ), RenderSkeleton).render(); }
+        if (has('tile_drawer'     )) { cast(get('tile_drawer'     ), CurveTileRenderer   ).render(); }
+        if (has('tile_highlighter')) { cast(get('tile_highlighter'), CurveTileHighlighter).render(); }
+        if (has('skeleton_drawer' )) { cast(get('skeleton_drawer' ), RenderSkeleton      ).render(); }
+        if (has('tangent_drawer'  )) { cast(get('tangent_drawer'  ), RenderSkeleton      ).render(); }
 
         // Extra stuff
         if (has('ends_helper'  )) { cast(get('ends_helper'  ), SegmentEndsHelper  ).build(); }

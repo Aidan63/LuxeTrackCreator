@@ -3,12 +3,11 @@ package components;
 import luxe.Component;
 import luxe.Mesh;
 import luxe.Vector;
-import components.CurvePoints;
-import utils.Tilesets;
+import components.CurveTiles;
 
 class CurveTileRenderer extends Component
 {
-    private var tiles : Array<CurveTile>;
+    private var meshes : Array<TileMesh>;
     
     public function new()
     {
@@ -17,7 +16,6 @@ class CurveTileRenderer extends Component
 
     override public function onadded()
     {
-        clean();
         render();
     }
 
@@ -26,87 +24,48 @@ class CurveTileRenderer extends Component
         clean();
     }
 
-    public function updateTexture(_position : Int)
+    public function render()
     {
-        if (Tilesets.currentTile != null)
+        if (has('tiles'))
         {
-            tiles[_position].mesh.geometry.texture = Luxe.resources.texture(Tilesets.currentTile.path);
+            var tiles : CurveTiles = cast get('tiles');
+
+            clean();
+            meshes = new Array<TileMesh>();
+
+            for (tile in tiles.tiles)
+            {
+                //meshes.push(new TileMesh(tile.points));
+                var mesh = new TileMesh(tile.points);
+                if (tile.tileset != "") mesh.mesh.geometry.texture = Luxe.resources.texture(tile.tileset);
+                meshes.push(mesh);
+            }
         }
     }
 
-    public function render()
+    public function updateTile(_position : Int)
     {
-        if (has('points'))
+        if (has('tiles'))
         {
-            var points : CurvePoints = cast get('points');
-
-            clean();
-            tiles = new Array<CurveTile>();
-
-            tiles.push(new CurveTile([
-                points.startPoint.position,
-                points.startPoint.negativePoint,
-                points.subPoints[0].negativePoint,
-                points.subPoints[0].position
-            ]));
-            tiles.push(new CurveTile([
-                points.startPoint.position,
-                points.startPoint.positivePoint,
-                points.subPoints[0].positivePoint,
-                points.subPoints[0].position
-            ]));
-
-            var prevPoint : Point = null;
-            for (point in points.subPoints)
-            {
-                if (prevPoint != null)
-                {
-                    tiles.push(new CurveTile([
-                        prevPoint.position,
-                        prevPoint.negativePoint,
-                        point.negativePoint,
-                        point.position
-                    ]));
-                    tiles.push(new CurveTile([
-                        prevPoint.position,
-                        prevPoint.positivePoint,
-                        point.positivePoint,
-                        point.position
-                    ]));
-                }
-
-                prevPoint = point;
-            }
-
-            tiles.push(new CurveTile([
-                prevPoint.position,
-                prevPoint.negativePoint,
-                points.endPoint.negativePoint,
-                points.endPoint.position
-            ]));
-            tiles.push(new CurveTile([
-                prevPoint.position,
-                prevPoint.positivePoint,
-                points.endPoint.positivePoint,
-                points.endPoint.position
-            ]));
+            var tiles : CurveTiles = cast get('tiles');
+            meshes[_position].mesh.geometry.texture = Luxe.resources.texture(tiles.tiles[_position].tileset);
         }
     }
 
     private function clean()
     {
-        if (tiles != null)
+        if (meshes != null)
         {
-            for (tile in tiles)
+            for (tile in meshes)
             {
                 tile.mesh.destroy();
             }
-            tiles = null;
+            meshes = null;
         }
     }
 }
 
-class CurveTile
+class TileMesh
 {
     public var mesh : Mesh;
 

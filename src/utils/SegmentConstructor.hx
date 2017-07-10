@@ -10,6 +10,7 @@ class SegmentConstructor
         entity.add(new components.curves.LinearCurve(_points));
         entity.add(new components.Neighbours());
         entity.add(new components.CurvePoints());
+        entity.add(new components.CurveTiles());
         entity.add(new components.CurveTileRenderer());
 
         return entity;
@@ -21,6 +22,7 @@ class SegmentConstructor
         entity.add(new components.curves.QuadraticCurve(_points));
         entity.add(new components.Neighbours());
         entity.add(new components.CurvePoints());
+        entity.add(new components.CurveTiles());
         entity.add(new components.CurveTileRenderer());
 
         return entity;
@@ -32,6 +34,7 @@ class SegmentConstructor
         entity.add(new components.curves.CubicCurve(_points));
         entity.add(new components.Neighbours());
         entity.add(new components.CurvePoints());
+        entity.add(new components.CurveTiles());
         entity.add(new components.CurveTileRenderer());
 
         return entity;
