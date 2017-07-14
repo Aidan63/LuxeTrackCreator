@@ -2,7 +2,11 @@ package components;
 
 import luxe.Component;
 import luxe.Vector;
+
 import components.CurvePoints;
+import data.SegmentData;
+import data.SegmentPoint;
+import data.SegmentVector;
 import utils.Tilesets;
 
 class CurveTiles extends Component
@@ -28,11 +32,12 @@ class CurveTiles extends Component
         {
             var points : CurvePoints = cast get('points');
 
+            /*
             newTiles.push(new Tile([
-                points.startPoint.position,
-                points.startPoint.negativePoint,
-                points.subPoints[0].negativePoint,
-                points.subPoints[0].position
+                points.data.startPoint.position,
+                points.data.startPoint.negativePoint,
+                points.data.subPoints[0].negativePoint,
+                points.data.subPoints[0].position
             ]));
             newTiles.push(new Tile([
                 points.startPoint.position,
@@ -40,29 +45,31 @@ class CurveTiles extends Component
                 points.subPoints[0].positivePoint,
                 points.subPoints[0].position
             ]));
+            */
 
-            var prevPoint : Point = null;
-            for (point in points.subPoints)
+            var prevPoint : SegmentPoint = null;
+            for (point in points.data.points)
             {
                 if (prevPoint != null)
                 {
                     newTiles.push(new Tile([
-                        prevPoint.position,
-                        prevPoint.negativePoint,
-                        point.negativePoint,
-                        point.position
+                        prevPoint.position.getLuxeVector(),
+                        prevPoint.negativePoint.getLuxeVector(),
+                        point.negativePoint.getLuxeVector(),
+                        point.position.getLuxeVector()
                     ]));
                     newTiles.push(new Tile([
-                        prevPoint.position,
-                        prevPoint.positivePoint,
-                        point.positivePoint,
-                        point.position
+                        prevPoint.position.getLuxeVector(),
+                        prevPoint.positivePoint.getLuxeVector(),
+                        point.positivePoint.getLuxeVector(),
+                        point.position.getLuxeVector()
                     ]));
                 }
 
                 prevPoint = point;
             }
 
+            /*
             newTiles.push(new Tile([
                 prevPoint.position,
                 prevPoint.negativePoint,
@@ -75,6 +82,7 @@ class CurveTiles extends Component
                 points.endPoint.positivePoint,
                 points.endPoint.position
             ]));
+            */
         }
 
         // Copy over the tileset and image to the new ones.

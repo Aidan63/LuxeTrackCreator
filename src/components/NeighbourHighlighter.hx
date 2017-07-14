@@ -25,8 +25,8 @@ class NeighbourHighlighter extends Component
             if (neighbours.previous == null)
             {
                 startPoint = Luxe.draw.circle({
-                    x     : points.startPoint.position.x,
-                    y     : points.startPoint.position.y,
+                    x     : points.data.get_firstPoint().position.x,
+                    y     : points.data.get_firstPoint().position.y,
                     r     : 16,
                     depth : 3,
                     color : new Color().set(1, 0.3, 0.3, 0.5),
@@ -35,8 +35,8 @@ class NeighbourHighlighter extends Component
             if (neighbours.next == null)
             {
                 endPoint = Luxe.draw.circle({
-                    x     : points.endPoint.position.x,
-                    y     : points.endPoint.position.y,
+                    x     : points.data.get_lastPoint().position.x,
+                    y     : points.data.get_lastPoint().position.y,
                     r     : 16,
                     depth : 3,
                     color : new Color().set(1, 0.3, 0.3, 0.5),

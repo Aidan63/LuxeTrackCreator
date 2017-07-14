@@ -45,34 +45,22 @@ class RenderSkeleton extends Component
             // Draw the lines
             var verticies = new Array<Vector>();
 
-            // Start negative points
-            verticies.push(points.startPoint.negativePoint);
-
             // Sub point negative points
-            for (point in points.subPoints)
+            for (point in points.data.points)
             {
-                verticies.push(point.negativePoint);
+                verticies.push(point.negativePoint.getLuxeVector());
             }
 
-            // end negative point
-            verticies.push(points.endPoint.negativePoint);
-
-            // end positive point
-            verticies.push(points.endPoint.positivePoint);
-
             // sub point positive points
-            var i : Int = points.subPoints.length - 1;
+            var i : Int = points.data.points.length - 1;
             while (i >= 0)
             {
-                var point = points.subPoints[i];
+                var point = points.data.points[i];
 
-                verticies.push(point.positivePoint);
+                verticies.push(point.positivePoint.getLuxeVector());
 
                 i --;
             }
-
-            // positive start point
-            verticies.push(points.startPoint.positivePoint);
 
             outline = Luxe.draw.poly({
                 points         : verticies,

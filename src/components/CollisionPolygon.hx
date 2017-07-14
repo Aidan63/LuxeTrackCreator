@@ -3,14 +3,21 @@ package components;
 import luxe.Component;
 import luxe.Color;
 import luxe.Vector;
-import phoenix.geometry.Geometry;
 import luxe.collision.Collision;
 import luxe.collision.shapes.Polygon;
+import phoenix.geometry.Geometry;
 
 class CollisionPolygon extends Component
 {
-    public var trackPoly : Polygon;
-    public var visual : Geometry;
+    /**
+     Geometry for showing if the user has their mouse over the segment.
+     */
+    private var visual : Geometry;
+
+    /**
+     The collision polygon used to detect if the mouse is over the segment.
+     */
+    private var polygon : Polygon;
 
     public function new()
     {
@@ -30,9 +37,9 @@ class CollisionPolygon extends Component
     override public function update(_dt : Float)
     {
         visual.color.a = 0;
-
+        
         var mouse = Luxe.camera.screen_point_to_world(Luxe.screen.cursor.pos);
-        if (Collision.pointInPoly(mouse.x, mouse.y, trackPoly))
+        if (Collision.pointInPoly(mouse.x, mouse.y, polygon))
         {
             if (Luxe.input.mousepressed(left))
             {
@@ -43,50 +50,6 @@ class CollisionPolygon extends Component
         }
     }
 
-    public function build()
-    {
-        clean();
-
-        if (has('points'))
-        {
-            var points : CurvePoints = cast get('points');
-            var verticies = new Array<Vector>();
-
-            // Start negative points
-            verticies.push(points.startPoint.negativePoint);
-
-            // Sub point negative points
-            for (point in points.subPoints)
-            {
-                verticies.push(point.negativePoint);
-            }
-
-            // end negative point
-            verticies.push(points.endPoint.negativePoint);
-            // end positive point
-            verticies.push(points.endPoint.positivePoint);
-
-            // sub point positive points
-            var i : Int = points.subPoints.length - 1;
-            while (i >= 0)
-            {
-                var point = points.subPoints[i];
-
-                verticies.push(point.positivePoint);
-
-                i --;
-            }
-
-            // positive start point
-            verticies.push(points.startPoint.positivePoint);
-
-            // Create the poly
-            trackPoly = new Polygon(0, 0, verticies);
-        }
-
-        render();
-    }
-
     private function clean()
     {
         if (visual != null)
@@ -94,31 +57,48 @@ class CollisionPolygon extends Component
             visual.drop();
             visual = null;
         }
-        if (trackPoly != null)
+        if (polygon != null)
         {
-            trackPoly.destroy();
-            trackPoly = null;
+            polygon.destroy();
+            polygon = null;
         }
     }
 
-    private function render()
+    public function build()
     {
+        clean();
+
         if (has('points'))
         {
             var points : CurvePoints = cast get('points');
+
+            // Build collision polygon
             var verticies = new Array<Vector>();
 
-            verticies.push(points.startPoint.negativePoint);
-            verticies.push(points.startPoint.positivePoint);
-
-            for (point in points.subPoints)
+            for (point in points.data.points)
             {
-                verticies.push(point.negativePoint);
-                verticies.push(point.positivePoint);
+                verticies.push(point.negativePoint.getLuxeVector());
             }
 
-            verticies.push(points.endPoint.negativePoint);
-            verticies.push(points.endPoint.positivePoint);
+            var i : Int = points.data.points.length - 1;
+            while (i >= 0)
+            {
+                var point = points.data.points[i];
+
+                verticies.push(point.positivePoint.getLuxeVector());
+
+                i --;
+            }
+
+            polygon = new Polygon(0, 0, verticies);
+
+            // Build geometry visual
+            var verticies = new Array<Vector>();
+            for (point in points.data.points)
+            {
+                verticies.push(point.negativePoint.getLuxeVector());
+                verticies.push(point.positivePoint.getLuxeVector());
+            }
 
             visual = Luxe.draw.poly({
                 points         : verticies,

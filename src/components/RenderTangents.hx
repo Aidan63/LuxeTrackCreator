@@ -34,35 +34,14 @@ class RenderTangents extends Component
 
             var verticies = new Array<Vector>();
 
-            verticies.push(new Vector(
-                points.startPoint.position.x,
-                points.startPoint.position.y
-            ));
-            verticies.push(new Vector(
-                points.startPoint.position.x + (10 * points.startPoint.tangent.x),
-                points.startPoint.position.y + (10 * points.startPoint.tangent.y)
-            ));
-
-            for (point in points.subPoints)
+            for (point in points.data.points)
             {
-                verticies.push(new Vector(
-                    point.position.x,
-                    point.position.y
-                ));
+                verticies.push(point.position.getLuxeVector());
                 verticies.push(new Vector(
                     point.position.x + (10 * point.tangent.x),
                     point.position.y + (10 * point.tangent.y)
                 ));
             }
-
-            verticies.push(new Vector(
-                points.endPoint.position.x,
-                points.endPoint.position.y
-            ));
-            verticies.push(new Vector(
-                points.endPoint.position.x + (10 * points.endPoint.tangent.x),
-                points.endPoint.position.y + (10 * points.endPoint.tangent.y)
-            ));
 
             geometry = Luxe.draw.poly({
                 points         : verticies,

@@ -178,8 +178,8 @@ class TrackSegment extends Entity
         if (has('points'))
         {
             var points : CurvePoints = cast get('points');
-            points.endNegativeDistance = _properties.startNegative;
-            points.endPositiveDistance = _properties.startPositive;
+            points.data.endNegativeDistance = _properties.startNegative;
+            points.data.endPositiveDistance = _properties.startPositive;
 
             build();
         }
@@ -190,8 +190,8 @@ class TrackSegment extends Entity
         if (has('points'))
         {
             var points : CurvePoints = cast get('points');
-            points.startNegativeDistance = _properties.endNegative;
-            points.startPositiveDistance = _properties.endPositive;
+            points.data.startNegativeDistance = _properties.endNegative;
+            points.data.startPositiveDistance = _properties.endPositive;
 
             build();
         }
@@ -229,11 +229,11 @@ class TrackSegment extends Entity
         if (has('points'))
         {
             var points : CurvePoints = get('points');
-            points.startPositiveDistance = _properties.startPositive;
-            points.startNegativeDistance = _properties.startNegative;
-            points.endPositiveDistance = _properties.endPositive;
-            points.endNegativeDistance = _properties.endNegative;
-            points.divisions = _properties.segmentSize;
+            points.data.startPositiveDistance = _properties.startPositive;
+            points.data.startNegativeDistance = _properties.startNegative;
+            points.data.endPositiveDistance = _properties.endPositive;
+            points.data.endNegativeDistance = _properties.endNegative;
+            points.data.divisions = _properties.segmentSize;
 
             build();
         }

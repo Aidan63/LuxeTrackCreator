@@ -34,7 +34,7 @@ class SegmentEndsHelper extends Component
 
             startText = Luxe.draw.text({
                 color      : new Color().rgb(0xffffff),
-                pos        : points.startPoint.position,
+                pos        : points.data.get_firstPoint().position.getLuxeVector(),
                 point_size : 14,
                 text       : 'start',
                 depth      : 3,
@@ -43,7 +43,7 @@ class SegmentEndsHelper extends Component
             });
             endText   = Luxe.draw.text({
                 color      : new Color().rgb(0xffffff),
-                pos        : points.endPoint.position,
+                pos        : points.data.get_lastPoint().position.getLuxeVector(),
                 point_size : 14,
                 text       : 'end',
                 depth      : 3,

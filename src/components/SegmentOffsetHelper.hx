@@ -37,7 +37,7 @@ class SegmentOffsetHelper extends Component
 
             startPositiveText = Luxe.draw.text({
                 color      : new Color().rgb(0xffffff),
-                pos        : points.startPoint.positivePoint,
+                pos        : points.data.get_firstPoint().positivePoint.getLuxeVector(),
                 point_size : 14,
                 text       : '+ve',
                 depth      : 3,
@@ -46,7 +46,7 @@ class SegmentOffsetHelper extends Component
             });
             startNegativeText = Luxe.draw.text({
                 color      : new Color().rgb(0xffffff),
-                pos        : points.startPoint.negativePoint,
+                pos        : points.data.get_firstPoint().negativePoint.getLuxeVector(),
                 point_size : 14,
                 text       : '-ve',
                 depth      : 3,
@@ -56,7 +56,7 @@ class SegmentOffsetHelper extends Component
 
             endPositiveText = Luxe.draw.text({
                 color      : new Color().rgb(0xffffff),
-                pos        : points.endPoint.positivePoint,
+                pos        : points.data.get_lastPoint().positivePoint.getLuxeVector(),
                 point_size : 14,
                 text       : '+ve',
                 depth      : 3,
@@ -65,7 +65,7 @@ class SegmentOffsetHelper extends Component
             });
             endNegativeText = Luxe.draw.text({
                 color      : new Color().rgb(0xffffff),
-                pos        : points.endPoint.negativePoint,
+                pos        : points.data.get_lastPoint().negativePoint.getLuxeVector(),
                 point_size : 14,
                 text       : '-ve',
                 depth      : 3,

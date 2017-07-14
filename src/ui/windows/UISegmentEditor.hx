@@ -234,11 +234,11 @@ class UISegmentEditor extends Panel
             {
                 var curve : components.CurvePoints = cast segment.get('points');
 
-                edit_startPositive.text = cast curve.startPositiveDistance;
-                edit_startNegative.text = cast curve.startNegativeDistance;
-                edit_endPositive.text = cast curve.endPositiveDistance;
-                edit_endNegative.text = cast curve.endNegativeDistance;
-                edit_segmentSize.text = cast curve.divisions;
+                edit_startPositive.text = cast curve.data.startPositiveDistance;
+                edit_startNegative.text = cast curve.data.startNegativeDistance;
+                edit_endPositive.text = cast curve.data.endPositiveDistance;
+                edit_endNegative.text = cast curve.data.endNegativeDistance;
+                edit_segmentSize.text = cast curve.data.divisions;
             }
 
             show_skeleton.state = segment.has('skeleton_drawer');
