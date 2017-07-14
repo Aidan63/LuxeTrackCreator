@@ -3,6 +3,8 @@ package states;
 import luxe.States;
 import luxe.Vector;
 import luxe.Entity;
+import luxe.Input;
+import dialogs.Dialogs;
 
 import ui.EditorUI;
 import entities.Grid;
@@ -11,7 +13,7 @@ import utils.SegmentConstructor;
 
 class EditorState extends State
 {
-    var testEntity : luxe.Entity;
+    private var initialSegment : luxe.Entity;
 
     private var grid : Entity;
     private var cursor : Entity;
@@ -29,7 +31,21 @@ class EditorState extends State
         cursor = new Cursor();
         ui     = new EditorUI();
 
-        SegmentConstructor.cubic([ new Vector(128, 128), new Vector(256, 256), new Vector(384, 384), new Vector(512, 512) ]);
-        SegmentConstructor.linear([ new Vector(128, 800), new Vector(800, 800) ]);
+        initialSegment = SegmentConstructor.linear([ new Vector(128, 800), new Vector(800, 800) ]);
+    }
+
+    override public function update(_dt : Float)
+    {
+        if (Luxe.input.keypressed(Key.space))
+        {
+            // Open dialog to get save location.
+            var result = Dialogs.save('Save track json', { ext : 'json', desc : 'Track data' });
+            
+            if (result != null)
+            {
+                // Start serialization
+                utils.TrackSerializer.serialize(initialSegment, result);
+            }
+        }
     }
 }

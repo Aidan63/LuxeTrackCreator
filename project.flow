@@ -18,7 +18,9 @@
     build : {
       dependencies : {
         luxe : '*',
-        mint : '*'
+        mint : '*',
+        linc_dialogs : '*',
+        tjson : '*'
       }
     },
 
